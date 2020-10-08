@@ -1,0 +1,24 @@
+{
+  "name": "html-parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qinjialei24/html-parser.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qinjialei24/html-parser/issues"
+  },
+  "homepage": "https://github.com/qinjialei24/html-parser#readme",
+  "devDependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "jest": "^26.5.2"
+  }
+}
