@@ -19,6 +19,9 @@
   "homepage": "https://github.com/qinjialei24/html-parser#readme",
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "jest": "^26.5.2"
+    "jest": "^26.5.2",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-serve": "^1.0.4"
   }
 }
