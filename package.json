@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "rollup -c -w",
     "test": "jest"
   },
   "repository": {
