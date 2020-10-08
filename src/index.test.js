@@ -15,10 +15,10 @@ test('html string to ast', () => {
 });
 
 test('createASTElement', () => {
-  const res = createASTElement('div', { id: 'app' });
+  const res = createASTElement('div', { id: 'app' }, [1]);
   expect(res).toStrictEqual({
     tag: 'div',
     attrs: { id: 'app' },
-    children: [],
+    children: [1],
   });
 });

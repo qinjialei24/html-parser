@@ -28,11 +28,11 @@ export function htmlParser(html) {
   return html;
 }
 
-export function createASTElement(tagName, attrs) {
+export function createASTElement(tagName, attrs,children) {
   return {
     tag: tagName,
     attrs,
-    children: [],
+    children,
   };
 }
 
