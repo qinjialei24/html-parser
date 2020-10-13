@@ -24,16 +24,53 @@ const html = `<div class="div" id="app" style="color:red;font-size:18px">
   </p>
 </div>`;
 
-export function htmlParser(html) {
-  return html;
+export function parseStartTag(html) {
+  const start = html.match(startTagOpen);
+  if (start) {
+    console.log('start: ', start);
+    const match = {
+      tagName: start[1],
+      attrs: [],
+    };
+    html = advance(html, start[0].length);
+    let end, attr;
+
+    while (
+      !(end = html.match(startTagClose)) &&
+      (attr = html.match(attribute))
+    ) {
+      match.attrs.push({
+        name: attr[1],
+        value: attr[3],
+      });
+      html = advance(html, attr[0].length);
+    }
+    console.log('html: ', html);
+  }
 }
 
-export function createASTElement(tagName, attrs,children) {
+export function createASTElement(tagName, attrs, children) {
   return {
     tag: tagName,
     attrs,
     children,
   };
+}
+
+export function advance(html, length) {
+  return html.substring(length);
+}
+
+export function htmlParser(html) {
+  while (html) {
+    const textEnd = html.indexOf('<');
+    console.log('textEnd: ', textEnd);
+    if (textEnd === 0) {
+      const startTagMatch = parseStartTag(html);
+    }
+    break;
+  }
+  return html;
 }
 
 htmlParser(html);
