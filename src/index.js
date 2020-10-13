@@ -27,7 +27,6 @@ const html = `<div class="div" id="app" style="color:red;font-size:18px">
 export function parseStartTag(html) {
   const start = html.match(startTagOpen);
   if (start) {
-    console.log('start: ', start);
     const match = {
       tagName: start[1],
       attrs: [],
@@ -45,7 +44,6 @@ export function parseStartTag(html) {
       });
       html = advance(html, attr[0].length);
     }
-    console.log('html: ', html);
   }
 }
 
@@ -64,7 +62,6 @@ export function advance(html, length) {
 export function htmlParser(html) {
   while (html) {
     const textEnd = html.indexOf('<');
-    console.log('textEnd: ', textEnd);
     if (textEnd === 0) {
       const startTagMatch = parseStartTag(html);
     }

@@ -1,4 +1,4 @@
-import { htmlParser, createASTElement, advance } from '../src';
+import { htmlParser, createASTElement } from '../src';
 
 test('html string to ast', () => {
   const html = `<div class="div" id="app" style="color:red;font-size:18px">
@@ -21,9 +21,4 @@ test('createASTElement', () => {
     attrs: { id: 'app' },
     children: [1],
   });
-});
-
-test('advance', () => {
-  const res = advance('<div></div>', 1);
-  expect(res).toStrictEqual('div></div>');
 });
