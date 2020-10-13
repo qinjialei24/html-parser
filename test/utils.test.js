@@ -4,8 +4,8 @@ describe('parseStartTag', () => {
   test('should return match object', () => {
     const input = '<div id="test" style="color:red;display:none"></div>';
     expect(parseStartTag(input)).toEqual({
-      tag: 'div',
-      attr: [
+      tagName: 'div',
+      attrs: [
         { name: 'id', value: 'test' },
         { name: 'style', value: 'color:red;display:none' },
       ],
@@ -14,7 +14,7 @@ describe('parseStartTag', () => {
 });
 
 describe('advance', () => {
-  test('should ', () => {
+  test('should delete string 1', () => {
     expect(advance('1234', 1)).toBe('234');
   });
 });

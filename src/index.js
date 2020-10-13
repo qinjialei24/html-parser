@@ -1,73 +1,92 @@
-const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/;
-// 标签名
-const ncname = '[a-zA-Z_][\\w\\-\\.]*';
-const qnameCapture = `((?:${ncname}\\:)?${ncname})`;
+import { advance, createASTElement, parseStartTag } from './utils';
 
+// id="app" id='app' id=app
+const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/;
+//标签名  <my-header></my-header>
+const ncname = `[a-zA-Z_][\\-\\.0-9_a-zA-Z]*`;
+// <my:header></my:header>
+const qnameCapture = `((?:${ncname}\\:)?${ncname})`;
 // <div
 const startTagOpen = new RegExp(`^<${qnameCapture}`);
-// > 或者 />
+// > />
 const startTagClose = /^\s*(\/?)>/;
 // </div>
 const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`);
-const doctype = /^<!DOCTYPE [^>]+>/i;
-// #7298: escape - to avoid being passed as HTML comment when inlined in page
-const comment = /^<!\--/;
-const conditionalComment = /^<!\[/;
+
+const NODE_TYPE = {
+  text: 1,
+};
 
 const html = `<div class="div" id="app" style="color:red;font-size:18px">
   hello,world{{data}}
-  <p>测试
-    <ul>
-      <li>1</li>
-      <li>2</li>
-    </ul>
-  </p>
+  <p id='xx'>测试</p>
 </div>`;
 
-export function parseStartTag(html) {
-  const start = html.match(startTagOpen);
-  if (start) {
-    const match = {
-      tagName: start[1],
-      attrs: [],
-    };
-    html = advance(html, start[0].length);
-    let end, attr;
+export function htmlParser(html = '') {
+  let root;
 
-    while (
-      !(end = html.match(startTagClose)) &&
-      (attr = html.match(attribute))
-    ) {
-      match.attrs.push({
-        name: attr[1],
-        value: attr[3],
-      });
-      html = advance(html, attr[0].length);
-    }
-  }
-}
-
-export function createASTElement(tagName, attrs, children) {
-  return {
-    tag: tagName,
-    attrs,
-    children,
-  };
-}
-
-export function advance(html, length) {
-  return html.substring(length);
-}
-
-export function htmlParser(html) {
+  let currentParent;
+  let text;
+  let stack = [];
   while (html) {
     const textEnd = html.indexOf('<');
     if (textEnd === 0) {
-      const startTagMatch = parseStartTag(html);
+      const { startTagMatch, htmlRest } = parseStartTag(html);
+      html = htmlRest;
+
+      if (startTagMatch) {
+        start(startTagMatch.tagName, startTagMatch.attrs);
+        continue;
+      }
+
+      const endTagMatch = html.match(endTag);
+
+      if (endTagMatch) {
+        html = advance(html, endTagMatch[0].length);
+        end(endTagMatch);
+        continue;
+      }
     }
-    break;
+
+    if (textEnd > 0) {
+      text = html.substring(0, textEnd);
+    }
+
+    if (text) {
+      html = advance(html, text.length);
+      chars(text);
+    }
   }
-  return html;
+
+  console.log('root: ', root);
+
+  function start(tagName, attrs) {
+    const element = createASTElement(tagName, attrs);
+    if (!root) {
+      root = element;
+    }
+    currentParent = element;
+    stack.push(element);
+  }
+
+  function end() {
+    const element = stack.pop();
+    currentParent = stack[stack.length - 1];
+    if (currentParent) {
+      element.parent = currentParent;
+      currentParent.children.push(element);
+    }
+  }
+
+  function chars(text) {
+    text = text.trim();
+    if (text.length > 0) {
+      currentParent.children.push({
+        type: NODE_TYPE.text,
+        text,
+      });
+    }
+  }
 }
 
 htmlParser(html);
