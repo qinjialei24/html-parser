@@ -4,11 +4,14 @@ describe('parseStartTag', () => {
   test('should return match object', () => {
     const input = '<div id="test" style="color:red;display:none"></div>';
     expect(parseStartTag(input)).toEqual({
-      tagName: 'div',
-      attrs: [
-        { name: 'id', value: 'test' },
-        { name: 'style', value: 'color:red;display:none' },
-      ],
+      htmlRest: '</div>',
+      startTagMatch: {
+        tagName: 'div',
+        attrs: [
+          { name: 'id', value: 'test' },
+          { name: 'style', value: 'color:red;display:none' },
+        ],
+      },
     });
   });
 });

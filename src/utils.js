@@ -5,6 +5,11 @@ export function parseStartTag(html = '') {
   const qnameCapture = `((?:${ncname}\\:)?${ncname})`;
   const startTagOpen = new RegExp(`^<${qnameCapture}`);
 
+  const result = {
+    startTagMatch: null, // 将开始标签的标签名 、 属性转换成 js 对象形式
+    htmlRest: html, // 解析完成后，剩余的 html 字符串
+  };
+
   const start = html.match(startTagOpen);
   if (start) {
     const match = {
@@ -23,19 +28,14 @@ export function parseStartTag(html = '') {
       });
       html = advance(html, attr[0].length);
     }
-    if (end) {
+    if (end) { // 如果解析到 > 或者 自闭和标签 />
       html = advance(html, end[0].length);
-      return {
-        startTagMatch: match,
-        htmlRest: html,
-      };
+      result.startTagMatch = match;
+      result.htmlRest = html;
     }
   }
 
-  return {
-    startTagMatch: null,
-    htmlRest: html,
-  };
+  return result;
 }
 
 export function advance(html, length) {
