@@ -1,3 +1,5 @@
+import { NODE_TYPE } from './parser';
+
 export function parseStartTag(html = '') {
   const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/;
   const startTagClose = /^\s*(\/?)>/;
@@ -28,7 +30,8 @@ export function parseStartTag(html = '') {
       });
       html = advance(html, attr[0].length);
     }
-    if (end) { // 如果解析到 > 或者 自闭和标签 />
+    if (end) {
+      // 如果解析到 > 或者 自闭和标签 />
       html = advance(html, end[0].length);
       result.startTagMatch = match;
       result.htmlRest = html;
@@ -47,5 +50,6 @@ export function createASTElement(tagName, attrs, children = []) {
     tagName,
     attrs,
     children,
+    type: NODE_TYPE.element,
   };
 }

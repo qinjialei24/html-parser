@@ -13,8 +13,9 @@ const startTagClose = /^\s*(\/?)>/;
 // </div>
 const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`);
 
-const NODE_TYPE = {
-  text: 1,
+export const NODE_TYPE = {
+  text: 1, //文本节点
+  element: 3, //元素节点
 };
 
 export default function parser(html = '') {
