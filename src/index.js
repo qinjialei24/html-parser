@@ -7,5 +7,6 @@ const html = `<div class="div" id="app" style="color:red;font-size:18px">
 </div>`;
 
 const ast = parser(html);
+console.log('ast: ', ast);
 const code = generate(ast);
 console.log('code: ', code);

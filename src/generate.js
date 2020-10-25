@@ -39,14 +39,10 @@ export function generateChildren(children = []) {
 }
 
 function generate(ast = '') {
-  console.log('ast: ', ast);
-
-  let code = `
-  _c(
-    ${ast.tagName},
+  let code = `_c(
+    '${ast.tagName}',
     ${ast.attrs.length > 0 ? generateAttrs(ast.attrs) : undefined},
-    ${ast.children ? generateChildren(ast.children) : ''}
-  )`;
+    ${ast.children ? generateChildren(ast.children) : ''})`;
   return code;
 }
 
