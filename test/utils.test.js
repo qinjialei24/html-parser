@@ -21,3 +21,9 @@ describe('advance', () => {
     expect(advance('1234', 1)).toBe('234');
   });
 });
+
+describe('generateChild', () => {
+  test('should delete string 1', () => {
+    expect(advance('1234', 1)).toBe('234');
+  });
+});

@@ -53,3 +53,7 @@ export function createASTElement(tagName, attrs, children = []) {
     type: NODE_TYPE.element,
   };
 }
+
+export function parseMustacheString(params) { // 解析含有 Mustache 的字符串 类似  测试{{a}} => _v('测试'+_s(a))
+  
+}
