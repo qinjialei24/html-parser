@@ -54,6 +54,24 @@ export function createASTElement(tagName, attrs, children = []) {
   };
 }
 
-export function parseMustacheString(params) { // 解析含有 Mustache 的字符串 类似  测试{{a}} => _v('测试'+_s(a))
-  
+export function parseMustacheString(text) {
+  // 解析含有 Mustache 的字符串 类似  测试{{a}} {{b}} => _v('测试'+_s(a)+" "+_s(b))
+  const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g;
+  let match,
+    index,
+    lastIndex = (defaultTagRE.lastIndex = 0),
+    textArr = [];
+
+  while ((match = defaultTagRE.exec(text))) {
+    index = match.index;
+    if (index > lastIndex) {
+      textArr.push(JSON.stringify(text.slice(lastIndex, index)));
+    }
+    textArr.push(`_s(${match[1].trim()})`);
+    lastIndex = index + match[0].length;
+  }
+  if (lastIndex < text.length) {
+    textArr.push(JSON.stringify(text.slice(lastIndex)));
+  }
+  return `_v(${textArr.join('+')})`;
 }

@@ -1,7 +1,7 @@
 import { NODE_TYPE } from './parser';
+import { parseMustacheString } from './utils';
 
 function generateAttrs(attrs) {
-  console.log('attrs: ', attrs);
   let attrsString = '';
 
   attrs.forEach((attr) => {
@@ -28,6 +28,8 @@ function generateChild(childAst) {
     let text = childAst.text;
     if (!defaultTagRE.test(text)) {
       return `_v(${JSON.stringify(text)})`;
+    } else {
+      return parseMustacheString(text);
     }
   }
 }
